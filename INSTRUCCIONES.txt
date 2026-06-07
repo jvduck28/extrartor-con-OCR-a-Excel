@@ -1,0 +1,154 @@
+═══════════════════════════════════════════════════════════════
+   🏦 INSTRUCCIONES PARA EL CONTADOR
+   Procesador Automático de Planillas Bancarias
+═══════════════════════════════════════════════════════════════
+
+📋 ¿QUÉ HACE ESTO?
+─────────────────
+Lee archivos PDF de planillas bancarias (sean digitales o fotos/escaneos),
+extrae los movimientos, los clasifica automáticamente (compras, servicios,
+impuestos, etc.) y genera un Excel ordenado por fecha.
+
+⏱️ ANTES: 15-30 minutos por planilla
+⏱️ AHORA: 30 segundos - 2 minutos por planilla
+
+
+🚀 CÓMO USARLO (3 formas, elegí la que más te guste)
+─────────────────────────────────────────────────────
+
+FORMA 1 - LA MÁS FÁCIL (Interfaz gráfica):
+  1. Doble clic en "INICIAR.bat"
+  2. Elegí opción [1] - Abrir interfaz gráfica
+  3. Click en "📁 Buscar PDF" y seleccioná tu planilla
+  4. Click en "🚀 PROCESAR PLANILLA"
+  5. ¡Listo! El Excel aparece en la misma carpeta que el PDF
+
+FORMA 2 - ARRASTRAR Y SOLTAR (la más rápida):
+  1. Abrí la carpeta donde está "INICIAR.bat"
+  2. Agarrá tu archivo PDF con el mouse
+  3. Soltalo ENCIMA del archivo "INICIAR.bat"
+  4. Se procesa solo y te deja el Excel al lado
+
+FORMA 3 - CARPETA AUTOMÁTICA (para procesar muchos):
+  1. Creá una carpeta llamada "entradas" dentro de esta carpeta
+  2. Copiá TODOS los PDFs que quieras procesar ahí
+  3. Doble clic en "INICIAR.bat" → opción [2]
+  4. Procesa todos y deja cada Excel al lado de su PDF
+
+
+📥 PRIMERA VEZ - INSTALACIÓN (solo una vez, 3 minutos)
+──────────────────────────────────────────────────────
+La primera vez que ejecutás INICIAR.bat, te va a instalar
+todo automáticamente. Solo tenés que:
+
+  ✅ Tener Python instalado: https://www.python.org/downloads/
+     ⚠️ IMPORTANTE: Al instalar Python, marcá la casilla
+     "Add Python to PATH" (abajo del todo, primera casilla)
+
+  ✅ Si tus planillas son FOTOS o ESCANEOS (no PDF digital):
+     Instalá Tesseract: https://github.com/UB-Mannheim/tesseract/wiki
+     → Descargá: tesseract-ocr-w64-setup-5.3.4.exe
+     → Después bajá el español: spa.traineddata de:
+       https://github.com/tesseract-ocr/tessdata/raw/main/spa.traineddata
+     → Poné spa.traineddata en: C:\Program Files\Tesseract-OCR\tessdata\
+
+  Si tus planillas ya son PDFs digitales (de home banking),
+  NO necesitás Tesseract.
+
+
+📊 ¿QUÉ TE GENERA?
+──────────────────
+Un archivo Excel con 3 hojas:
+
+  📑 "Resumen por Fecha"
+     ┌──────────┬──────────┬──────────┬──────────┐
+     │  Fecha   │Compras   │Servicios │Impuestos │ ...
+     ├──────────┼──────────┼──────────┼──────────┤
+     │01/06/2025│ $5.230   │ $3.450   │ $1.200   │ ...
+     │02/06/2025│ $890     │ $0       │ $0       │ ...
+     └──────────┴──────────┴──────────┴──────────┘
+     → Filas = fechas, Columnas = tipos de movimiento
+     → Cada celda es la SUMA de ese tipo en esa fecha
+
+  📑 "Totales"
+     → Total débitos, total créditos, diferencia
+
+  📑 "Movimientos Detalle"
+     → Cada movimiento individual con su clasificación
+     → Para que verifiques que clasificó bien
+
+
+🔧 SI ALGO SALE MAL
+───────────────────
+
+❌ "Python no encontrado":
+   → Instalá Python y marcá "Add to PATH"
+   → https://www.python.org/downloads/
+
+❌ "No se encontraron movimientos":
+   → El PDF puede estar muy borroso o en formato raro
+   → Probá sacarle una foto mejor con CamScanner
+   → O abrí el PDF y "imprimí" como PDF de nuevo (a veces arregla)
+
+❌ Clasificó mal un movimiento:
+   → Abrí el archivo procesar_planilla.py con el Bloc de notas
+   → Buscá la sección "CATEGORIAS" arriba del todo
+   → Agregá palabras clave. Ejemplo:
+     Si tenés un movimiento "YPF" que no clasifica,
+     agregá 'ypf' a la lista de 'Compras'
+
+❌ Tesseract no lee bien:
+   → La foto tiene que ser clara, sin sombras
+   → Probá con mejor iluminación
+   → En CamScanner: usá filtro "Blanco y negro" o "Mejorar"
+
+
+📁 ESTRUCTURA DE CARPETAS
+────────────────────────
+
+  PlanillaBancaria/
+  │
+  ├── 📄 procesar_planilla.py    ← El programa (no tocar)
+  ├── 📄 requirements.txt        ← Lista de componentes
+  ├── 📄 INICIAR.bat             ← ⭐ ESTE ES EL QUE ABRÍS
+  ├── 📄 INSTRUCCIONES.txt       ← Este archivo
+  │
+  └── 📂 entradas/               ← ⭐ PONÉ ACÁ LOS PDFs
+      ├── planilla_bbva_junio.pdf
+      ├── planilla_galicia_junio.pdf
+      └── foto_santander.pdf
+
+  Después de procesar:
+
+  PlanillaBancaria/
+  │
+  ├── 📄 planilla_bbva_junio_PROCESADO.xlsx  ← Resultado
+  ├── 📄 planilla_galicia_junio_PROCESADO.xlsx
+  └── 📂 entradas/
+      └── foto_santander.pdf
+
+
+📞 TIPS PARA MEJORES RESULTADOS
+───────────────────────────────
+
+📸 Para fotos/escaneos:
+   • Buena iluminación, sin sombras
+   • Plano, no torcido
+   • CamScanner → filtro "Mejorar" → calidad alta
+   • Si sale borroso, el OCR falla → sacá de nuevo
+
+📄 Para PDFs digitales:
+   • Funciona perfecto con PDFs de home banking
+   • BBVA, Galicia, Santander, Macro, etc.
+
+🔄 Para mantenerlo actualizado:
+   • Cada tanto ejecutá INICIAR.bat y te avisa si falta algo
+   • Si agregás categorías nuevas, editá procesar_planilla.py
+     (la sección CATEGORIAS arriba del todo, es fácil)
+
+
+═══════════════════════════════════════════════════════════════
+   ¿Preguntas? Escribile al que te instaló esto.
+   Este programa es TUYO, no necesitás internet ni nada
+   para usarlo después de la primera instalación.
+═══════════════════════════════════════════════════════════════
